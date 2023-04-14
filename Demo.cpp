@@ -35,6 +35,14 @@ string Trim(const string &s) {
     return LTrim(RTrim(s));
 }
 
+string TimeToString(time_t time) {
+    tm tmp;
+    localtime_s(&tmp, &time);
+    char out[51];
+    strftime(out, 50, "%F %T", &tmp);
+    return out;
+}
+
 struct Ticket
 {
     string ID;
@@ -98,21 +106,13 @@ Ticket NhapPhieu() {
 }
 
 void InPhieu(Ticket t) {
-    tm createdAt;
-    localtime_s(&createdAt, &t.CreatedAt);
-    char CreatedAt[51];
-    strftime(CreatedAt, 50, "%FT%T%z", &createdAt);
-    tm updatedAt;
-    localtime_s(&updatedAt, &t.UpdatedAt);
-    char UpdatedAt[51];
-    strftime(UpdatedAt, 50, "%FT%T%z", &updatedAt);
     cout << "Ma so: " << t.ID << endl;
     cout << "Ten sinh vien: " << t.StudentName << endl;
     cout << "Lop: " << t.ClassName << endl;
     cout << "Noi dung: " << t.Content << endl;
     cout << "Uu tien: " << t.Priority << endl;
-    cout << "Ngay tao phieu: " << CreatedAt << endl;
-    cout << "Ngay cap nhat phieu: " << UpdatedAt << endl;
+    cout << "Ngay tao phieu: " << TimeToString(t.CreatedAt) << endl;
+    cout << "Ngay cap nhat phieu: " << TimeToString(t.UpdatedAt) << endl;
 }
 
 void NhapDanhSach(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
@@ -476,9 +476,9 @@ int main()
         }
         case 4:
         {
-            Ticket* ticket = new Ticket();
-            if (TimPhieu(pq, *ticket)) {
-                InPhieu(*ticket);
+            Ticket ticket;
+            if (TimPhieu(pq, ticket)) {
+                InPhieu(ticket);
             }
             else {
                 cout << "Phieu can tim khong ton tai!" << endl;
