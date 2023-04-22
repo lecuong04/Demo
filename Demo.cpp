@@ -385,7 +385,6 @@ vector<string> LopCoNhieuViecCanKhoaXuLy(priority_queue<Ticket, vector<Ticket>, 
             className.push_back(element.first);
         }
     }
-
     return className;
 }
 
