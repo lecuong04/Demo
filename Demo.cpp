@@ -43,6 +43,7 @@ string TimeToString(time_t time) {
     return out;
 }
 
+// 1. Thông tin phiếu giải quyết công việc
 struct Ticket
 {
     string ID;
@@ -102,6 +103,7 @@ Ticket NhapPhieu() {
     cout << "Noi dung: "; getline(cin, t.Content);
     t.Content = Trim(t.Content);
     t.CreatedAt = time(0);
+    t.UpdatedAt = t.CreatedAt;
     return t;
 }
 
@@ -115,6 +117,7 @@ void InPhieu(Ticket t) {
     cout << "Ngay cap nhat phieu: " << TimeToString(t.UpdatedAt) << endl;
 }
 
+// 2. Tạo danh sách hàng đợi được nhập từ bàn phím
 void NhapDanhSach(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
     size_t n;
     cout << "Nhap so luong phieu can nhap: ";
@@ -126,6 +129,7 @@ void NhapDanhSach(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
     }
 }
 
+// 6. In dánh sách tất cả các phiếu trong hàng đợi
 void InDanhSach(priority_queue<Ticket, vector<Ticket>, CompareTicket> pq) {
     while (!pq.empty())
     {
@@ -135,6 +139,7 @@ void InDanhSach(priority_queue<Ticket, vector<Ticket>, CompareTicket> pq) {
     }
 }
 
+// Nhập dữ liệu mẫu vào hàng đợi
 void DuLieuMau(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
     pq.push(Ticket("214", "Nguyen Thi Kieu T", "T", "UTC2"));
     Sleep(1000);
@@ -163,10 +168,12 @@ void DuLieuMau(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
     pq.push(Ticket("123", "Nguyen Duong Le C", "C", "HUFI"));
 }
 
+// 3. Thêm một phiếu giải quyết công việc vào hàng đợi
 void ThemPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, Ticket t) {
     pq.push(t);
 }
 
+// 4. Xóa một phần tử ra khỏi hàng đợi (Xóa thông qua ID)
 bool XoaPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, string id) {
     if (!pq.empty()) {
         bool _b = false;
@@ -190,6 +197,7 @@ bool XoaPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, string 
     }
 }
 
+// 4. Xóa một phần tử ra khỏi hàng đợi (Nếu isTop là true thì xóa phần tử đầu tiên, ngược lại thì xóa thông qua ID)
 bool XoaPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, bool isTop) {
     if (!pq.empty()) {
         if (isTop) {
@@ -209,6 +217,7 @@ bool XoaPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, bool is
     }
 }
 
+// 2. Đọc danh sách hàng đợi từ file
 bool DocDuLieuTuFile(string fileName, priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
     bool _b = false;
     try {
@@ -235,6 +244,7 @@ bool DocDuLieuTuFile(string fileName, priority_queue<Ticket, vector<Ticket>, Com
     return _b;
 }
 
+// 2. Ghi danh sách hàng đợi vào file
 bool GhiDuLieuVaoFile(string fileName, priority_queue<Ticket, vector<Ticket>, CompareTicket> pq) {
     bool _b = false;
     try {
@@ -263,6 +273,7 @@ bool GhiDuLieuVaoFile(string fileName, priority_queue<Ticket, vector<Ticket>, Co
     return _b;
 }
 
+// 5. Tìm kiếm một phiếu xử lý trong hàng đợi thông qua ID
 bool TimPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> pq, Ticket &t, string id) {
     id = Trim(id);
     while (!pq.empty()) {
@@ -276,18 +287,7 @@ bool TimPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> pq, Ticket &
     return false;
 }
 
-bool TimPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> pq, Ticket &t) {
-    if (!pq.empty()) {
-        string id;
-        cout << "Nhap ma so can tim: ";
-        cin >> id;
-        return TimPhieu(pq, t, id);
-    }
-    else {
-        return false;
-    }
-}
-
+// 7. Cập nhật thông tin của một phiếu xử lý trong hàng đợi (Được nhập từ bàn phím)
 bool CapNhatPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
     if (!pq.empty()) {
         bool _b = false;
@@ -323,6 +323,7 @@ bool CapNhatPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
     }
 }
 
+// 7. Cập nhật thông tin của một phiếu xử lý trong hàng đợi
 bool CapNhatPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, Ticket t) {
     if (!pq.empty()) {
         bool _b = false;
@@ -346,6 +347,7 @@ bool CapNhatPhieu(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, Tic
     }
 }
 
+// 10. Danh sách của việc sắp được xử lý (count là số lượng của việc sắp được xử lý)
 priority_queue<Ticket, vector<Ticket>, CompareTicket> ViecSapDuocXuLy(priority_queue<Ticket, vector<Ticket>, CompareTicket> pq, size_t count) {
     priority_queue<Ticket, vector<Ticket>, CompareTicket> out;
     if (count > 0) {
@@ -365,6 +367,7 @@ priority_queue<Ticket, vector<Ticket>, CompareTicket> ViecSapDuocXuLy(priority_q
     }
 }
 
+// 9. Sinh viên lớp nào có nhiều việc cần khoa xử lý nhất
 vector<string> LopCoNhieuViecCanKhoaXuLy(priority_queue<Ticket, vector<Ticket>, CompareTicket> pq) {
     unordered_map<string, size_t> map;
     while (!pq.empty())
@@ -388,6 +391,7 @@ vector<string> LopCoNhieuViecCanKhoaXuLy(priority_queue<Ticket, vector<Ticket>, 
     return className;
 }
 
+// 8. Ưu tiên đưa một phiếu xử lý lên đầu danh sách (Ưu tiên thông qua ID)
 bool PhieuUuTien(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, string id) {
     if (!pq.empty()) {
         bool _b = false;
@@ -415,6 +419,7 @@ bool PhieuUuTien(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq, stri
     }
 }
 
+// 8. Ưu tiên đưa một phiếu xử lý lên đầu danh sách (Được nhập từ bàn phím)
 bool PhieuUuTien(priority_queue<Ticket, vector<Ticket>, CompareTicket> &pq) {
     if (!pq.empty()) {
         string id;
@@ -445,7 +450,7 @@ int main()
         cout << "5.\tIn danh sach tat ca cac phieu trong hang doi" << endl;
         cout << "6.\tCap nhat thong tin cua 1 phieu xu ly trong hang doi" << endl;
         cout << "7.\tUu tien dua 1 phieu xu ly len dau danh sach" << endl;
-        cout << "8.\tSinh vien lop co nhieu viec can khoa xu ly nhat" << endl;
+        cout << "8.\tLop co nhieu viec can khoa xu ly nhat" << endl;
         cout << "9.\tDanh sach 10 viec sap duoc xu ly" << endl;
         cout << "10.\tDoc du lieu tu file" << endl;
         cout << "11.\tGhi du lieu vao file" << endl;
@@ -456,6 +461,11 @@ int main()
         cout << endl;
         cout << "Nhap lua chon: ";
         cin >> n;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore();
+            continue;
+        }
         cout << endl;
 
         switch (n)
@@ -476,7 +486,10 @@ int main()
         case 4:
         {
             Ticket ticket;
-            if (TimPhieu(pq, ticket)) {
+            string id;
+            cout << "Nhap ma so can tim: ";
+            cin >> id;
+            if (TimPhieu(pq, ticket, id)) {
                 InPhieu(ticket);
             }
             else {
